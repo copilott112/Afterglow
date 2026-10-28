@@ -4,7 +4,7 @@ A personal streaming-style media player that runs entirely in your browser. Poin
 
 It is a single file (`afterglow-streaming.html`). There is no server, no account and no install.
 
-**[Download Afterglow Streaming](https://copilott112.github.io/Afterglow/)**
+**[Download Afterglow Streaming](https://copilott112.github.io/Afterglow/)** · [All releases](https://github.com/copilott112/Afterglow/releases)
 
 ![Afterglow Streaming home page](assets/screenshots/home.png)
 
@@ -26,6 +26,7 @@ It is a single file (`afterglow-streaming.html`). There is no server, no account
 - [Troubleshooting](#troubleshooting)
 - [Known limitations](#known-limitations)
 - [Credits](#credits)
+- [License](#license)
 
 ## Quick start
 
@@ -142,3 +143,7 @@ Your browser decides what it can actually play. If a file won't play, convert it
 - Fonts: [Fraunces](https://fonts.google.com/specimen/Fraunces) and [DM Sans](https://fonts.google.com/specimen/DM+Sans) via Google Fonts.
 - Afterglow Streaming does not host, stream or provide any media. It only plays video files that you already have on your own computer.
 - Movie and show names, posters and artwork belong to their respective owners.
+
+## License
+
+Afterglow Streaming is released under the [MIT License](LICENSE). The license covers this project's code only; posters, metadata and fonts belong to their respective owners and services.
