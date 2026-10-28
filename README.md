@@ -1,6 +1,6 @@
 # Afterglow Streaming
 
-A personal streaming-style media player that runs entirely in your browser. Point it at a folder of movies and TV shows on your computer and you get a Netflix-like library with posters, descriptions, resume-where-you-left-off, subtitles and a seek bar with preview thumbnails.
+A personal streaming-style media player that runs entirely in your browser. Point it at a folder of movies, TV shows and YouTube videos on your computer and you get a Netflix-like library with posters, descriptions, resume-where-you-left-off, subtitles and a seek bar with preview thumbnails.
 
 It is a single file (`afterglow-streaming.html`). There is no server, no account and no install.
 
@@ -21,6 +21,7 @@ It is a single file (`afterglow-streaming.html`). There is no server, no account
 - [Folder layout](#folder-layout)
 - [Supported formats](#supported-formats)
 - [Features](#features)
+- [YouTube tab](#youtube-tab)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Privacy and data](#privacy-and-data)
 - [Troubleshooting](#troubleshooting)
@@ -39,7 +40,7 @@ The app remembers your folder, so next time you only need to open the file. If t
 
 ## Folder layout
 
-Pick the folder that contains a `Shows` folder, a `Movies` folder, or both (folder names are not case-sensitive). Videos can sit in subfolders. Anything outside `Shows` and `Movies` is ignored.
+Pick the folder that contains at least one of `Shows`, `Movies` and `Youtube` (folder names are not case-sensitive). Videos can sit in subfolders. Anything outside these three folders is ignored.
 
 ```
 Content/
@@ -48,14 +49,20 @@ Content/
 │       ├── Breaking_Bad__s01_e01.mp4
 │       ├── Breaking_Bad__s01_e01.srt        (optional subtitles)
 │       └── Breaking_Bad__s01_e02.mp4
-└── Movies/
-    ├── The_Dark_Knight_(2008).mp4
-    └── Spirited_Away_2001.mp4
+├── Movies/
+│   ├── The_Dark_Knight_(2008).mp4
+│   └── Spirited_Away_2001.mp4
+└── Youtube/
+    ├── How_Volcanoes_Work.mp4
+    └── Travel_Vlogs/
+        └── Lisbon_in_3_Days.mp4
 ```
 
 **Shows** must be named `Show_Name__sXX_eYY.ext`: two underscores, then `s` and the season number (1–2 digits), `_e` and the episode number (1–3 digits). `S`/`E` in capitals also work. Single underscores in the name become spaces. Use exactly the same show name in every file, because the name is how episodes are grouped. Files in `Shows` that don't match this pattern are skipped.
 
 **Movies** are named `Movie_Title_(Year).ext` or `Movie_Title_Year.ext`. The year (1900–2099) is optional but helps find the right poster and description. Underscores become spaces.
+
+**Youtube** files can be named anything. Underscores become spaces and the file name is used as the title. Nothing is looked up for them; see [YouTube tab](#youtube-tab) for how thumbnails work.
 
 ## Supported formats
 
@@ -68,6 +75,7 @@ Your browser decides what it can actually play. If a file won't play, convert it
 ## Features
 
 **Library**
+- Top bar with Home, Movies, TV Shows, YouTube and My List, plus search, Refresh (rescan your folders) and Settings
 - Home page with a featured title, Continue watching, Recently added, My list, genre rows, Movies and TV shows
 - Posters, descriptions, genres and runtime fetched automatically, plus ratings, episode titles and episode images for TV shows
 - Mark movies as watched or unwatched from their page
@@ -88,7 +96,19 @@ Your browser decides what it can actually play. If a file won't play, convert it
 - Name, accent and highlight colors, five background themes, favicon (ring, play, letter, emoji or your own image)
 - Poster size, heading font, film grain
 - Default speed, subtitle size, thumbnail previews on or off
-- Export and import a backup of your watch history, My list and settings. The backup does not include your video files, the metadata cache or folder permission
+- Export and import a backup of your watch history, My list, YouTube thumbnails and settings. The backup does not include your video files, the metadata cache or folder permission
+
+## YouTube tab
+
+The YouTube tab shows the videos in your `Content/Youtube` folder as a grid of 16:9 cards, newest first, with a progress bar on partly watched videos and a "Watched ✓" badge on finished ones.
+
+Because these are plain files on your disk, the app can't know which online video they came from. You tell it once by pasting the video's link, and it fetches the thumbnail.
+
+- **Cards with a thumbnail play immediately** when you click them. A small pencil button in the corner of the card (always visible on touch screens) opens the video's page, where you can change or remove the thumbnail, mark it watched or resume it.
+- **Cards without a thumbnail** show "No thumbnail". Clicking one opens a compact page with the placeholder on the left and the title, a link field and buttons beside it.
+- **Paste a link and press Enter** (or click **Set thumbnail**). The thumbnail animates in and the video starts playing by itself after a moment. Accepted links are YouTube watch, `youtu.be`, Shorts, embed and live links, a bare 11-character video ID, or a direct image URL (`.jpg`, `.png`, `.webp`, `.gif` or `.avif`).
+- Prefer to skip the thumbnail? Use **Play** on that page.
+- Thumbnails are saved in your browser and included in backups. If the full-size thumbnail doesn't exist, a smaller one is used.
 
 ## Keyboard shortcuts
 
@@ -114,15 +134,19 @@ Your browser decides what it can actually play. If a file won't play, convert it
 
 - Your videos never leave your computer. They are read directly from disk by the browser.
 - The only network requests are for metadata, artwork and fonts. Titles and years are sent to [TVMaze](https://www.tvmaze.com) (shows), and to the iTunes Search API with Wikipedia as a fallback (movies). Posters come from those services; when no artwork is found, or while metadata is still loading, the app falls back to a Bing image search using the title. Fonts load from Google Fonts. No keys or accounts are needed.
-- Watch progress, My list, settings and the metadata cache are stored in your browser (localStorage and IndexedDB). They stay on this browser and device, so use **Export backup** in Settings to move them elsewhere.
+- YouTube thumbnails are loaded from YouTube's image servers (`i.ytimg.com`), and only for videos where you pasted a link. If you paste a direct image URL instead, the image is loaded from that site. Your local YouTube-folder files are never uploaded or matched against anything.
+- Watch progress, My list, YouTube thumbnail links, settings and the metadata cache are stored in your browser (localStorage and IndexedDB). They stay on this browser and device, so use **Export backup** in Settings to move them elsewhere.
 
 ## Troubleshooting
 
 | Problem | Fix |
 | --- | --- |
 | "Your browser can't play this file" | The codec isn't supported. Convert to MP4 (H.264/AAC), or try Edge or Chrome |
-| "No Shows or Movies folder found" | Select the folder that contains them, not one of them directly |
+| "No Shows, Movies or Youtube folder found" | Select the folder that contains them, not one of them directly |
 | A show doesn't appear | Check the file name follows `Name__s01_e01.mp4` and sits under a `Shows` folder |
+| A YouTube video doesn't appear | Make sure the file is inside a `Youtube` folder directly under the folder you selected, then press **Refresh** |
+| "That is not a YouTube link" | Paste a full YouTube video link, a bare video ID, or a direct link to an image file |
+| YouTube thumbnail is blank or wrong | Open the video's page with the pencil button, then paste the correct link, or choose **Remove thumbnail** |
 | Wrong poster or description | Make the file name closer to the real title (add the year for movies), then **Settings → Clear metadata cache** |
 | Posters or descriptions missing | Check your connection and any ad blocker, then press **Refresh** |
 | "Metadata rate limit hit" | The free lookup services limit requests. Wait a minute and press **Refresh** |
@@ -134,12 +158,14 @@ Your browser decides what it can actually play. If a file won't play, convert it
 
 - Only one subtitle track is loaded automatically per video, and there is no language picker.
 - Metadata depends on free public services and can occasionally match the wrong title.
+- YouTube videos only appear in the YouTube tab. They are not included in search, Continue watching or My list, and no titles or descriptions are looked up for them.
+- YouTube thumbnails need an internet connection and a link you paste yourself.
 - There is no intro detection or skipping.
 - Chromium-based browsers (Chrome, Edge) give the best experience because they can remember your folder.
 
 ## Credits
 
-- Show information and images come from [TVMaze](https://www.tvmaze.com). Movie information comes from the iTunes Search API and Wikipedia.
+- Show information and images come from [TVMaze](https://www.tvmaze.com). Movie information comes from the iTunes Search API and Wikipedia. YouTube thumbnails come from YouTube.
 - Fonts: [Fraunces](https://fonts.google.com/specimen/Fraunces) and [DM Sans](https://fonts.google.com/specimen/DM+Sans) via Google Fonts.
 - Afterglow Streaming does not host, stream or provide any media. It only plays video files that you already have on your own computer.
 - Movie and show names, posters and artwork belong to their respective owners.
