@@ -1,1 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="color-scheme" content="dark">
+  <title>Afterglow · YouTube Player</title>
+  <style>
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;background:#000;color:#f0e9de;font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
+    #screen{position:relative;width:100%;height:100%;background:#000;display:grid;place-items:center}
+    #player{position:absolute;inset:0;width:100%;height:100%}
+    #player iframe{width:100%;height:100%;border:0}
+    #notice{position:relative;z-index:3;max-width:min(520px,88vw);padding:24px 28px;border:1px solid #ffffff24;border-radius:12px;background:#171412;text-align:center;box-shadow:0 18px 48px #000b}
+    #notice h1{font:600 25px/1.15 Georgia,serif;margin:0 0 10px}
+    #notice p{color:#b6aca1;margin:0 0 16px}
+    #notice a{display:inline-block;color:#fff4ea;background:#d8432f;text-decoration:none;font-weight:650;padding:10px 17px;border-radius:6px}
+    #status{position:absolute;left:14px;bottom:14px;z-index:2;padding:6px 10px;border-radius:5px;background:#0009;color:#ffffff99;font-size:11px;pointer-events:none}
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+  <main id="screen">
+    <div id="player"></div>
+    <section id="notice">
+      <h1>Afterglow YouTube Player</h1>
+      <p id="noticeText">Open a video from Afterglow to start playback. This page provides the secure HTTPS player frame.</p>
+      <a id="openYoutube" class="hidden" target="_blank" rel="noopener noreferrer">Open on YouTube</a>
+    </section>
+    <div id="status">Secure player frame</div>
+  </main>
 
+  <script>
+    'use strict';
+    const APP_REFERRER = 'https://copilott112.github.io/Afterglow/';
+    const params = new URLSearchParams(location.search);
+    const videoId = (params.get('v') || '').trim();
+    const notice = document.getElementById('notice');
+    const noticeText = document.getElementById('noticeText');
+    const openYoutube = document.getElementById('openYoutube');
+    const statusEl = document.getElementById('status');
+    let player = null;
+
+    function sendToAfterglow(type, details = {}) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({
+          source: 'afterglow-youtube-proxy',
+          type,
+          ...details,
+        }, '*');
+      }
+    }
+
+    function showError(code, message) {
+      notice.classList.remove('hidden');
+      noticeText.textContent = message;
+      openYoutube.href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(videoId);
+      openYoutube.classList.remove('hidden');
+      statusEl.textContent = 'YouTube player error ' + code;
+      sendToAfterglow('error', { code, message });
+    }
+
+    const ERROR_TEXT = {
+      2: 'YouTube rejected the video ID. Try opening the video directly on YouTube.',
+      5: 'The YouTube player could not play this video in the embedded player.',
+      100: 'This video is unavailable or private.',
+      101: 'The video owner does not allow embedded playback. Open it on YouTube instead.',
+      150: 'The video owner does not allow embedded playback. Open it on YouTube instead.',
+      153: 'YouTube did not receive a usable Referer for this player request. Check that the Worker is deployed and serving this page over HTTPS.',
+    };
+
+    function startPlayer() {
+      if (!videoId || !/^[A-Za-z0-9_-]{11}$/.test(videoId)) {
+        noticeText.textContent = 'This is the Afterglow player template. Open a video from Afterglow, or add a valid 11-character video ID as ?v=VIDEO_ID.';
+        return;
+      }
+
+      notice.classList.add('hidden');
+      statusEl.textContent = 'Connecting to YouTube…';
+
+      player = new YT.Player('player', {
+        width: '100%',
+        height: '100%',
+        videoId,
+        host: 'https://www.youtube.com',
+        playerVars: {
+          autoplay: 1,
+          controls: 1,
+          playsinline: 1,
+          rel: 0,
+          enablejsapi: 1,
+          origin: location.origin,
+          widget_referrer: APP_REFERRER,
+        },
+        events: {
+          onReady(event) {
+            const frame = event.target.getIframe();
+            frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+            frame.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
+            frame.setAttribute('allowfullscreen', '');
+            statusEl.textContent = 'Connected to YouTube';
+            sendToAfterglow('ready', { videoId });
+            try { event.target.playVideo(); } catch (_) {}
+          },
+          onStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) statusEl.textContent = 'Playing';
+            else if (event.data === YT.PlayerState.PAUSED) statusEl.textContent = 'Paused';
+            else if (event.data === YT.PlayerState.BUFFERING) statusEl.textContent = 'Buffering…';
+            else if (event.data === YT.PlayerState.ENDED) statusEl.textContent = 'Playback ended';
+          },
+          onError(event) {
+            const message = ERROR_TEXT[event.data] || 'YouTube could not play this video in the embedded player.';
+            showError(event.data, message);
+          },
+        },
+      });
+    }
+
+    function loadYouTubeAPI() {
+      if (window.YT && window.YT.Player) return startPlayer();
+      window.onYouTubeIframeAPIReady = startPlayer;
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      script.async = true;
+      script.onerror = () => showError('API', 'Could not load the YouTube player API. Check your connection or content blocker.');
+      document.head.appendChild(script);
+    }
+
+    if (videoId) loadYouTubeAPI();
+  </script>
+</body>
+</html>
