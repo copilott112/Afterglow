@@ -42,6 +42,20 @@
     button, a { font: inherit; }
     ::selection { color: var(--bg); background: var(--accent-2); }
     :focus-visible { outline: 2px solid var(--accent-2); outline-offset: 5px; }
+
+    /* ===== 3D backdrop layers ===== */
+    #gl { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; pointer-events: none; }
+    .vignette { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse at center, transparent 38%, rgba(16, 15, 18, .58) 100%); }
+    main { position: relative; z-index: 2; }
+    footer { position: relative; z-index: 2; }
+    .logo-fb { position: fixed; left: 50%; top: 50%; width: 260px; height: 260px; margin: -130px 0 0 -130px; z-index: 0; display: none; perspective: 900px; pointer-events: none; opacity: .55; }
+    .no-gl .logo-fb { display: block; }
+    .lfi { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(var(--lrx, 0deg)) rotateY(var(--lry, 0deg)); }
+    .lfi i { position: absolute; inset: 0; border: 3px solid var(--accent); border-radius: 50%; box-shadow: 0 0 30px #ed795955; }
+    .lfi i:nth-child(2) { inset: -26px; border-color: var(--accent-2); border-width: 1.5px; transform: rotateX(70deg); }
+    .lfi i:nth-child(3) { inset: -52px; border-width: 1px; border-color: #f1e9dd88; transform: rotateY(70deg); }
+    .lfi b { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 40px #ed7959aa; }
+
     .progress { position: fixed; inset: 0 auto auto 0; height: 2px; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); z-index: 50; box-shadow: 0 0 14px #ed795988; }
     .nav { position: fixed; z-index: 30; top: 0; left: 0; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 22px clamp(22px, 6vw, 84px); transition: background .35s, padding .35s, border-color .35s; border-bottom: 1px solid transparent; }
     .nav.scrolled { padding-top: 15px; padding-bottom: 15px; background: #100f12d9; border-color: var(--line); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
@@ -59,9 +73,9 @@
     .hero-copy { position: relative; z-index: 5; width: min(920px, 100%); text-align: center; margin-top: -30px; pointer-events: none; }
     .kicker { display: inline-flex; align-items: center; gap: 10px; color: var(--accent-2); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .2em; }
     .kicker::before, .kicker::after { content: ''; width: 24px; height: 1px; background: currentColor; opacity: .65; }
-    h1 { margin: 28px 0 20px; font: 500 clamp(58px, 10.2vw, 134px)/.91 var(--serif); letter-spacing: -.075em; }
+    h1 { margin: 28px 0 20px; font: 500 clamp(58px, 10.2vw, 134px)/.91 var(--serif); letter-spacing: -.075em; text-shadow: 0 6px 50px rgba(16, 15, 18, .75); }
     h1 span { display: block; color: var(--accent); font-style: italic; font-weight: 500; }
-    .hero-description { width: min(440px, 90%); margin: 0 auto; color: #c0b7af; font-size: 15px; line-height: 1.8; }
+    .hero-description { width: min(440px, 90%); margin: 0 auto; color: #c0b7af; font-size: 15px; line-height: 1.8; text-shadow: 0 2px 20px rgba(16, 15, 18, .9); }
     .hero-actions { display: flex; justify-content: center; gap: 12px; margin-top: 32px; pointer-events: auto; }
     .button { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 0 19px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: 700; transition: transform .25s, background .25s, border-color .25s; }
     .button:hover { transform: translateY(-3px); }
@@ -89,7 +103,7 @@
     .scroll-cue i { display: block; width: 1px; height: 38px; background: linear-gradient(var(--accent), transparent); transform-origin: top; animation: cue 1.6s ease-in-out infinite; }
     @keyframes cue { 0%,100% { transform: scaleY(.45); opacity: .4; } 50% { transform: scaleY(1); opacity: 1; } }
 
-    .marquee-wrap { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #151316; padding: 16px 0; }
+    .marquee-wrap { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(21, 19, 22, .72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 16px 0; }
     .marquee { width: max-content; display: flex; align-items: center; gap: 34px; animation: marquee 28s linear infinite; color: #8f8580; font: 10px var(--mono); letter-spacing: .18em; text-transform: uppercase; }
     .marquee b { color: var(--accent); font-weight: 400; }
     @keyframes marquee { to { transform: translateX(-50%); } }
@@ -98,9 +112,9 @@
     .section::before { content: ''; position: absolute; top: 0; left: 50%; width: min(84%, 980px); height: 1px; transform: translateX(-50%); background: linear-gradient(90deg, transparent, #f1e9dd18, transparent); pointer-events: none; }
     .container { width: min(1100px, 100%); margin: 0 auto; }
     .section-label { color: var(--accent); font: 10px var(--mono); letter-spacing: .19em; text-transform: uppercase; }
-    .section h2 { max-width: 760px; margin: 23px 0; font: 500 clamp(42px, 7vw, 86px)/.99 var(--serif); letter-spacing: -.065em; }
+    .section h2 { max-width: 760px; margin: 23px 0; font: 500 clamp(42px, 7vw, 86px)/.99 var(--serif); letter-spacing: -.065em; text-shadow: 0 4px 34px rgba(16, 15, 18, .85); }
     .section h2 em { color: var(--accent); font-weight: 500; }
-    .section-lead { max-width: 490px; color: var(--muted); font-size: 15px; line-height: 1.85; }
+    .section-lead { max-width: 490px; color: var(--muted); font-size: 15px; line-height: 1.85; text-shadow: 0 2px 22px rgba(16, 15, 18, .9); }
     .intro-grid { display: grid; grid-template-columns: 1fr .8fr; gap: 80px; align-items: end; }
     .intro-aside { padding-bottom: 8px; }
     .mini-stat { display: flex; align-items: center; gap: 16px; padding: 17px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
@@ -144,7 +158,97 @@
     .feature-card .feature-content h3 { text-wrap: balance; }
     .feature-index { position: absolute; top: 22px; left: 24px; z-index: 3; color: #fff9; font: 10px var(--mono); }
 
-    .manifesto { overflow: hidden; background: #1a171a; }
+    /* ===== 3D app showcase (pinned, scroll-scrubbed) ===== */
+    .section.stage { padding: 0; height: 340vh; }
+    .stage-sticky { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 64px 4vw 16px; }
+    .stage-head { text-align: center; }
+    .stage .stage-head h2 { max-width: none; margin: 10px auto 0; font-size: clamp(28px, 4vw, 48px); line-height: 1; }
+    .scene3d { position: relative; display: grid; place-items: center; perspective: 1700px; width: 100%; }
+    .device-glow { position: absolute; z-index: 0; width: min(80vw, 900px); height: 55%; left: 50%; top: 52%; transform: translate(-50%, -50%); background: radial-gradient(ellipse, #ed795938, transparent 68%); filter: blur(30px); pointer-events: none; }
+    .device { position: relative; z-index: 1; width: max(280px, min(86vw, 980px, calc((100vh - 340px) * 1.6))); transform-style: preserve-3d; will-change: transform; transform: rotateX(16deg) rotateY(-28deg) rotateZ(-2deg) scale(.9); }
+    .plate { border-radius: 14px; overflow: hidden; border: 1px solid rgba(241, 233, 221, .2); background: #171519; box-shadow: 0 60px 120px #000a, 0 0 80px #ed795922; }
+    .chrome { display: flex; align-items: center; gap: 14px; height: 30px; padding: 0 12px; background: #1d1a1d; border-bottom: 1px solid var(--line); }
+    .chrome .dots { display: inline-flex; gap: 6px; }
+    .chrome .dots i { width: 8px; height: 8px; border-radius: 50%; background: #3a3438; }
+    .chrome .dots i:first-child { background: var(--accent); }
+    .chrome .url { flex: 1; max-width: 280px; margin: 0 auto; padding: 4px 12px; border-radius: 99px; background: #100f12; color: var(--dim); font: 9px var(--mono); letter-spacing: .06em; text-align: center; }
+    .screen { position: relative; width: 100%; aspect-ratio: 1000 / 625; overflow: hidden; background: #0f0d0c; }
+    .chip { position: absolute; padding: 9px 14px; border: 1px solid rgba(241, 233, 221, .22); border-radius: 99px; background: rgba(29, 26, 29, .92); color: var(--cream); font: 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; box-shadow: 0 18px 40px #0008; }
+    .chip::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+    .chip.c1 { left: -3%; top: 14%; transform: translateZ(110px); }
+    .chip.c2 { right: -4%; top: 32%; transform: translateZ(140px); }
+    .chip.c3 { left: -2%; bottom: 16%; transform: translateZ(90px); }
+    .chip.c4 { right: -2%; bottom: 8%; transform: translateZ(120px); }
+    .stage-caps { display: grid; width: min(620px, 92vw); min-height: 84px; text-align: center; }
+    .cap { grid-area: 1 / 1; margin: 0; opacity: 0; transform: translateY(10px); transition: opacity .4s, transform .4s; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .cap b { display: block; margin-bottom: 4px; color: var(--cream); font: 500 20px var(--serif); letter-spacing: -.02em; }
+    .cap.on { opacity: 1; transform: none; }
+    .stage-prog { width: min(260px, 60vw); height: 2px; border-radius: 2px; overflow: hidden; background: var(--line); }
+    .stage-prog i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+
+    /* mock of afterglow-streaming.html (designed at 1000 x 625, scaled to fit) */
+    .mock { position: absolute; left: 0; top: 0; width: 1000px; height: 625px; transform-origin: 0 0; transform: scale(var(--k, .5)); background: #0f0d0c; color: #f0e9de; font: 15px/1.5 var(--sans); }
+    .m-view { position: absolute; inset: 0; overflow: hidden; }
+    .m-nav { position: absolute; z-index: 5; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 2px; padding: 10px 30px; background: rgba(15, 13, 12, .86); border-bottom: 1px solid #ffffff14; font-weight: 500; color: #9b9186; white-space: nowrap; }
+    .m-brand { display: flex; align-items: center; gap: 9px; margin-right: 22px; font: 600 20px var(--serif); color: #f0e9de; }
+    .m-brand::before { content: ''; width: 14px; height: 14px; border-radius: 50%; border: 3px solid #d8432f; box-shadow: 0 0 0 2px #0f0d0c, 0 0 0 3px #ffffff30; }
+    .m-nav span { position: relative; padding: 8px 11px; }
+    .m-nav span.on { color: #f0e9de; }
+    .m-nav span.on::after { content: ''; position: absolute; left: 11px; right: 11px; bottom: 2px; height: 2px; background: #e3b665; }
+    .m-nav .m-sp { flex: 1; padding: 0; }
+    .m-nav .m-search { width: 150px; padding: 6px 4px; border-bottom: 1px solid #2e2824; }
+    .m-scroll { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+    .m-hero { position: relative; height: 410px; overflow: hidden; background: linear-gradient(135deg, #3a2430, #bf6b50 60%, #e3b665); }
+    .m-hero::before { content: ''; position: absolute; width: 360px; height: 360px; right: 12%; top: 8%; border-radius: 50%; background: radial-gradient(circle, #ffe5aa, #e77d58 60%, transparent 62%); opacity: .75; filter: blur(14px); }
+    .m-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, #0f0d0c 2%, transparent 55%), linear-gradient(90deg, #0f0d0cf5 6%, #0f0d0c70 46%, transparent 80%); }
+    .m-hp { position: absolute; z-index: 1; right: 70px; bottom: 44px; width: 150px; aspect-ratio: 2 / 3; border-radius: 5px; border: 1px solid #ffffff1f; box-shadow: 0 18px 48px #000c; background: radial-gradient(circle at 62% 36%, #ffe5aa 0 11%, #ef8b5d 12% 18%, transparent 19%), linear-gradient(180deg, #283847, #bf6b50 55%, #241b29); }
+    .m-hc { position: absolute; z-index: 2; left: 30px; bottom: 44px; max-width: 470px; }
+    .m-kind { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: #e3b665; font-weight: 600; font-size: 13px; }
+    .m-kind::before { content: ''; width: 26px; height: 1px; background: #e3b665; }
+    .m-h1 { font: 600 58px/1 var(--serif); letter-spacing: -.025em; }
+    .m-meta { margin: 8px 0 6px; color: #9b9186; font-size: 14px; }
+    .m-hc p { margin: 0 0 16px; color: #d6cdc0; max-width: 46ch; }
+    .m-acts { display: flex; gap: 10px; }
+    .m-btn { padding: 10px 20px; border-radius: 6px; background: #d8432f; color: #fff4ea; font-weight: 600; }
+    .m-btn.g { background: #ffffff14; color: #f0e9de; border: 1px solid #ffffff1f; }
+    .m-scroll h4 { display: flex; align-items: center; gap: 14px; margin: 8px 30px 10px; font: 600 20px var(--serif); }
+    .m-scroll h4::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, #2e2824, transparent); }
+    .m-row { display: flex; gap: 14px; padding: 4px 30px 18px; }
+    .m-card { flex: 0 0 132px; }
+    .m-pz { position: relative; display: flex; align-items: flex-end; aspect-ratio: 2 / 3; padding: 8px; overflow: hidden; border-radius: 5px; border: 1px solid #ffffff14; }
+    .m-pz::before { content: ''; position: absolute; width: 44%; aspect-ratio: 1; left: 38%; top: 20%; border-radius: 50%; background: radial-gradient(circle, #ffe5aa, #e77d58); opacity: .8; }
+    .m-pz::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 45%, #000c); }
+    .m-fb { position: relative; z-index: 2; font: 600 13px/1.1 var(--serif); }
+    .m-bar { position: absolute; z-index: 3; left: 0; bottom: 0; height: 3px; background: #e3b665; }
+    .m-card b { display: block; margin-top: 8px; font-weight: 600; font-size: 13px; }
+    .m-card small { color: #9b9186; font-size: 12px; }
+    .p1 { background: linear-gradient(180deg, #283847, #bf6b50 55%, #241b29); }
+    .p2 { background: linear-gradient(180deg, #172b43, #527c87 60%, #17202c); }
+    .p3 { background: linear-gradient(180deg, #201b32, #9a493f 55%, #211923); }
+    .p4 { background: linear-gradient(180deg, #102735, #476a70 52%, #1a202a); }
+    .p5 { background: linear-gradient(180deg, #2c2238, #8f7ea1 55%, #1d1724); }
+    .p6 { background: linear-gradient(180deg, #1d2c32, #6a8b83 55%, #19231f); }
+    .m-ply { background: #000; opacity: 0; }
+    .m-halo { position: absolute; left: 180px; top: 90px; width: 640px; height: 360px; border-radius: 30px; background: radial-gradient(circle at 62% 38%, #ffe5aa 0 9%, #ef8b5d 10% 16%, transparent 17%), linear-gradient(180deg, #283847, #bf6b50 55%, #241b29); filter: blur(60px) saturate(1.6) brightness(1.1) hue-rotate(var(--hue, 0deg)); transform: scale(1.4); opacity: .95; }
+    .m-vid { position: absolute; left: 180px; top: 90px; width: 640px; height: 360px; overflow: hidden; border-radius: 4px; }
+    .m-scene { position: absolute; inset: 0; background: radial-gradient(circle at 62% 38%, #ffe5aa 0 9%, #ef8b5d 10% 16%, transparent 17%), linear-gradient(180deg, #283847, #bf6b50 55%, #241b29); filter: hue-rotate(var(--hue, 0deg)); }
+    .m-scene::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 42%; background: #171520; clip-path: polygon(0 60%, 14% 25%, 28% 52%, 45% 8%, 62% 45%, 78% 22%, 100% 55%, 100% 100%, 0 100%); }
+    .m-ptop { position: absolute; z-index: 3; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 12px; padding: 18px 30px 50px; background: linear-gradient(#000d, transparent); }
+    .m-ptitle { font: 500 20px var(--serif); }
+    .m-pbot { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; padding: 50px 30px 22px; background: linear-gradient(transparent, #000e); }
+    .m-thumb { position: absolute; bottom: 86px; width: 160px; transform: translateX(-50%); text-align: center; }
+    .m-tc { height: 90px; border-radius: 5px; border: 2px solid #ffffffd9; box-shadow: 0 8px 24px #000a; background: radial-gradient(circle at 60% 40%, #ffe5aa 0 12%, #ef8b5d 13% 20%, transparent 21%), linear-gradient(180deg, #2c3a4a, #c4745a 60%, #241b29); filter: hue-rotate(var(--hue, 0deg)); }
+    .m-thumb span { display: block; margin-top: 5px; font-size: 13px; font-variant-numeric: tabular-nums; text-shadow: 0 1px 4px #000; }
+    .m-seek { position: relative; height: 5px; margin-bottom: 14px; border-radius: 3px; background: #ffffff40; }
+    .m-seek i { position: absolute; left: 0; top: 0; bottom: 0; width: 16%; border-radius: 3px; background: #e3b665; }
+    .m-seek u { position: absolute; top: 50%; left: 16%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; background: #e3b665; }
+    .m-ctl { display: flex; align-items: center; gap: 10px; }
+    .m-round { display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border-radius: 19px; background: #ffffff1f; color: #fff; font-size: 13px; font-weight: 600; }
+    .m-round.big { min-width: 46px; height: 46px; border-radius: 23px; background: #ffffff33; }
+    .m-time { margin-left: 8px; color: #d9d0c3; font-size: 13px; font-variant-numeric: tabular-nums; }
+    .m-grow { flex: 1; }
+
+    .manifesto { overflow: hidden; background: rgba(26, 23, 26, .5); }
     .manifesto::before { content: 'AFTERGLOW'; position: absolute; bottom: -7vw; left: 50%; transform: translateX(-50%); white-space: nowrap; color: #ffffff05; font: 700 19vw/.8 var(--sans); letter-spacing: -.1em; }
     .manifesto-inner { position: relative; z-index: 1; text-align: center; }
     .manifesto h2 { max-width: 880px; margin: 24px auto; }
@@ -153,7 +257,7 @@
     .manifesto-mark span { width: 17px; height: 17px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 20px #ed7959aa; }
 
     .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 65px; }
-    .step { min-height: 230px; padding: 26px; border: 1px solid var(--line); background: #ffffff03; transition: background .3s, transform .3s, border-color .3s; }
+    .step { min-height: 230px; padding: 26px; border: 1px solid var(--line); background: rgba(16, 15, 18, .55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .3s, transform .3s, border-color .3s; }
     .step:hover { transform: translateY(-7px); border-color: #ed795966; background: #ed79590a; }
     .step-num { color: var(--accent); font: 10px var(--mono); }
     .step h3 { margin: 40px 0 10px; font: 500 25px var(--serif); }
@@ -163,7 +267,7 @@
     .final-cta::before { content: ''; position: absolute; width: 700px; height: 400px; top: 15%; left: 50%; transform: translateX(-50%); background: radial-gradient(ellipse, #a84c3433, transparent 67%); pointer-events: none; }
     .final-cta .container { position: relative; }
     .final-cta h2 { max-width: 800px; margin: 24px auto; }
-    .final-cta p { margin: 0 auto 30px; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .final-cta p { margin: 0 auto 30px; color: var(--muted); font-size: 14px; line-height: 1.8; text-shadow: 0 2px 22px rgba(16, 15, 18, .9); }
     .final-cta .button { min-width: 190px; }
     .fineprint { margin-top: 17px !important; color: var(--dim) !important; font: 9px var(--mono); letter-spacing: .06em; }
     footer { display: flex; justify-content: space-between; gap: 18px; padding: 24px clamp(22px, 6vw, 84px) 30px; border-top: 1px solid var(--line); color: var(--dim); font: 9px var(--mono); letter-spacing: .06em; }
@@ -208,6 +312,13 @@
       .step h3 { margin-top: 28px; }
       footer { flex-direction: column; }
     }
+    @media (max-width: 700px) {
+      .chip { display: none; }
+      .section.stage { height: 300vh; }
+    }
+    @media (max-width: 520px) {
+      .nav-right a.nav-app { display: none; }
+    }
     @media (max-width: 420px) {
       .nav-right a:first-child { display: none; }
       .hero-actions { flex-direction: column; width: min(260px, 100%); margin-left: auto; margin-right: auto; }
@@ -215,6 +326,7 @@
       .poster { opacity: .42; }
       .poster-two, .poster-four { display: none; }
       .section { padding-left: 22px; padding-right: 22px; }
+      .section.stage { padding: 0; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -223,10 +335,13 @@
   </style>
 </head>
 <body>
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="logo-fb" aria-hidden="true"><div class="lfi" id="lfi"><i></i><i></i><i></i><b></b></div></div>
+  <div class="vignette" aria-hidden="true"></div>
   <div class="progress" aria-hidden="true"></div>
   <nav class="nav" aria-label="Main navigation">
     <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span>AFTERGLOW</span></a>
-    <div class="nav-right"><a href="#experience">The experience</a><a class="nav-pill" href="#download">Get the player ↗</a></div>
+    <div class="nav-right"><a href="#experience">The experience</a><a class="nav-app" href="#showcase">The app</a><a class="nav-pill" href="#download">Get the player ↗</a></div>
   </nav>
 
   <main id="top">
@@ -303,18 +418,92 @@
       </div>
     </section>
 
+    <section class="section stage" id="showcase" aria-labelledby="showcase-title">
+      <div class="stage-sticky">
+        <div class="stage-head">
+          <div class="section-label">03 / See it in action</div>
+          <h2 id="showcase-title">One file. <em>Your whole cinema.</em></h2>
+        </div>
+        <div class="scene3d">
+          <div class="device-glow" aria-hidden="true"></div>
+          <div class="device" id="device" role="img" aria-label="Illustrated preview of the Afterglow Streaming app with its library and its video player">
+            <div class="plate">
+              <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="url">afterglow-streaming.html</span></div>
+              <div class="screen" id="screen">
+                <div class="mock" id="mock">
+                  <div class="m-view" id="mLib">
+                    <div class="m-nav"><b class="m-brand">Afterglow Streaming</b><span class="on">Home</span><span>Movies</span><span>TV Shows</span><span>YouTube</span><span>My List</span><span class="m-sp"></span><span class="m-search">Search ( / )</span><span>Refresh</span></div>
+                    <div class="m-scroll" id="mScroll">
+                      <div class="m-hero">
+                        <div class="m-hp"></div>
+                        <div class="m-hc"><div class="m-kind">Movie</div><div class="m-h1">Golden Hour</div><div class="m-meta">2024 · Drama, Adventure</div><p>A quiet story about the last light of summer.</p><div class="m-acts"><span class="m-btn">▶ Play</span><span class="m-btn g">More info</span><span class="m-btn g">Surprise me</span></div></div>
+                      </div>
+                      <h4>Continue watching</h4>
+                      <div class="m-row">
+                        <div class="m-card"><div class="m-pz p1"><span class="m-fb">Golden Hour</span><i class="m-bar" style="width:62%"></i></div><b>Golden Hour</b><small>41:12 watched</small></div>
+                        <div class="m-card"><div class="m-pz p2"><span class="m-fb">Blue Distance</span><i class="m-bar" style="width:35%"></i></div><b>Blue Distance</b><small>S1 E4</small></div>
+                        <div class="m-card"><div class="m-pz p3"><span class="m-fb">Last Ember</span><i class="m-bar" style="width:80%"></i></div><b>Last Ember</b><small>1:32:07 watched</small></div>
+                        <div class="m-card"><div class="m-pz p4"><span class="m-fb">North of Here</span><i class="m-bar" style="width:12%"></i></div><b>North of Here</b><small>Up next · S2 E1</small></div>
+                        <div class="m-card"><div class="m-pz p5"><span class="m-fb">Paper Moons</span><i class="m-bar" style="width:50%"></i></div><b>Paper Moons</b><small>58:40 watched</small></div>
+                        <div class="m-card"><div class="m-pz p6"><span class="m-fb">Quiet Harbor</span><i class="m-bar" style="width:22%"></i></div><b>Quiet Harbor</b><small>S1 E2</small></div>
+                      </div>
+                      <h4>Recently added</h4>
+                      <div class="m-row">
+                        <div class="m-card"><div class="m-pz p4"><span class="m-fb">North of Here</span></div><b>North of Here</b><small>2023</small></div>
+                        <div class="m-card"><div class="m-pz p6"><span class="m-fb">Quiet Harbor</span></div><b>Quiet Harbor</b><small>2022 · 8 ep</small></div>
+                        <div class="m-card"><div class="m-pz p2"><span class="m-fb">Blue Distance</span></div><b>Blue Distance</b><small>2021 · 10 ep</small></div>
+                        <div class="m-card"><div class="m-pz p1"><span class="m-fb">Golden Hour</span></div><b>Golden Hour</b><small>2024</small></div>
+                        <div class="m-card"><div class="m-pz p3"><span class="m-fb">Last Ember</span></div><b>Last Ember</b><small>2020</small></div>
+                        <div class="m-card"><div class="m-pz p5"><span class="m-fb">Paper Moons</span></div><b>Paper Moons</b><small>2019</small></div>
+                      </div>
+                      <h4>My list</h4>
+                      <div class="m-row">
+                        <div class="m-card"><div class="m-pz p3"><span class="m-fb">Last Ember</span></div><b>Last Ember</b><small>2020</small></div>
+                        <div class="m-card"><div class="m-pz p1"><span class="m-fb">Golden Hour</span></div><b>Golden Hour</b><small>2024</small></div>
+                        <div class="m-card"><div class="m-pz p6"><span class="m-fb">Quiet Harbor</span></div><b>Quiet Harbor</b><small>2022 · 8 ep</small></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="m-view m-ply" id="mPly">
+                    <div class="m-halo"></div>
+                    <div class="m-vid"><div class="m-scene"></div></div>
+                    <div class="m-ptop"><span class="m-round">←</span><span class="m-ptitle">Golden Hour</span></div>
+                    <div class="m-pbot">
+                      <div class="m-thumb" id="mThumb"><div class="m-tc"></div><span id="mThumbT">0:19:00</span></div>
+                      <div class="m-seek"><i id="mFill"></i><u id="mKnob"></u></div>
+                      <div class="m-ctl"><span class="m-round">|◀</span><span class="m-round">−10</span><span class="m-round big">▶</span><span class="m-round">+10</span><span class="m-round">▶|</span><span class="m-time" id="mTime">0:19:00 / 1:58:03</span><span class="m-grow"></span><span class="m-round">1×</span><span class="m-round">CC</span><span class="m-round">Glow</span><span class="m-round">⛶</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span class="chip c1">Continue watching</span>
+            <span class="chip c2">Seek-bar previews</span>
+            <span class="chip c3">Ambient glow</span>
+            <span class="chip c4">8 looks</span>
+          </div>
+        </div>
+        <div class="stage-caps" aria-live="off">
+          <p class="cap on" data-cap="0"><b>Your library, ready to browse.</b>Choose your folder and your movies and shows appear as posters, with Continue watching and My list right on Home. YouTube sits one tab over.</p>
+          <p class="cap" data-cap="1"><b>Pick up where you left off.</b>Your progress is remembered, so resuming is one click. Search across titles and episodes.</p>
+          <p class="cap" data-cap="2"><b>Cinema controls.</b>Ambient glow around the picture, seek-bar previews, subtitles from .srt or .vtt files, and the last scene's colors linger after you stop watching.</p>
+        </div>
+        <div class="stage-prog" aria-hidden="true"><i id="stageProg"></i></div>
+      </div>
+    </section>
+
     <section class="section manifesto">
       <div class="container manifesto-inner reveal">
         <div class="manifesto-mark" aria-hidden="true"><span></span></div>
-        <div class="section-label">03 / The Afterglow idea</div>
+        <div class="section-label">04 / The Afterglow idea</div>
         <h2>Less managing your movies.<br><em>More enjoying them.</em></h2>
         <p class="section-lead">No juggling a pile of apps. Bring your local videos and YouTube library into one viewing space, then settle into whatever you feel like watching.</p>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="steps">
       <div class="container">
-        <div class="reveal"><div class="section-label">04 / Three simple steps</div><h2>From folder<br>to <em>film night.</em></h2></div>
+        <div class="reveal"><div class="section-label">05 / Three simple steps</div><h2>From folder<br>to <em>film night.</em></h2></div>
         <div class="steps">
           <article class="step reveal"><div class="step-num">STEP / 01</div><h3>Download</h3><p>Get the single HTML file. Nothing complicated to install.</p></article>
           <article class="step reveal reveal-delay-1"><div class="step-num">STEP / 02</div><h3>Choose what to watch</h3><p>Browse your local videos or explore the YouTube library from the same app.</p></article>
@@ -336,6 +525,7 @@
 
   <footer><span>© <span id="year"></span> AFTERGLOW STREAMING</span><span>Made for the love of watching.</span><a href="#top">Back to the beginning ↑</a></footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
     (() => {
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -424,6 +614,365 @@
           target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
         });
       });
+    })();
+  </script>
+
+  <script>
+    /* ===== 3D scroll scene: tunnel of film frames, spinning 3D logo, pinned app showcase =====
+       Everything below is a pure function of the (smoothed) scroll position:
+       scroll down = it plays forward, scroll up = it plays backward, stop scrolling = it stops. */
+    (() => {
+      const doc = document.documentElement;
+      const $ = (s) => document.querySelector(s);
+      const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const path = (z) => [Math.sin(z * 0.06) * 1.4, Math.cos(z * 0.045) * 0.9];
+
+      let target = window.scrollY;
+      let sy = target;
+      let dirty = true;
+
+      /* ---------- WebGL scene ---------- */
+      const canvas = $('#gl');
+      const LOGO_DIST = 6;
+      const LOGO_FOV = 45;
+      const TUNNEL_LEN = 118;
+      let G = null;
+
+      function glowTexture(T) {
+        const c = document.createElement('canvas');
+        c.width = c.height = 128;
+        const g = c.getContext('2d');
+        const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+        gr.addColorStop(0, 'rgba(255,255,255,1)');
+        gr.addColorStop(0.25, 'rgba(255,255,255,0.35)');
+        gr.addColorStop(1, 'rgba(255,255,255,0)');
+        g.fillStyle = gr;
+        g.fillRect(0, 0, 128, 128);
+        return new T.CanvasTexture(c);
+      }
+
+      function initGL() {
+        const T = window.THREE;
+        if (!T || !canvas) return null;
+        let renderer;
+        try {
+          renderer = new T.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+        } catch (e) { return null; }
+        if (!renderer || !renderer.getContext()) return null;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setClearColor(0x100f12, 1);
+        renderer.autoClear = false;
+
+        const scene = new T.Scene();
+        scene.fog = new T.FogExp2(0x100f12, 0.032);
+        const camera = new T.PerspectiveCamera(58, 1, 0.1, 400);
+
+        /* film-frame tunnel */
+        const pal = [0xed7959, 0xf1b879, 0x6aa7a8, 0x8f7ea1].map((c) => new T.Color(c));
+        const colorAt = (u) => {
+          const t = clamp(u, 0, 1) * 3;
+          const k = Math.min(2, Math.floor(t));
+          return pal[k].clone().lerp(pal[k + 1], t - k);
+        };
+        const N = 72, SP = 1.8;
+        const lineGeo = new T.BufferGeometry().setFromPoints([
+          new T.Vector3(-6.5, -3.65, 0), new T.Vector3(6.5, -3.65, 0),
+          new T.Vector3(6.5, 3.65, 0), new T.Vector3(-6.5, 3.65, 0)
+        ]);
+        const planeGeo = new T.PlaneGeometry(13, 7.3);
+        const frames = [];
+        for (let i = 0; i < N; i++) {
+          const col = colorAt(i / (N - 1));
+          const g = new T.Group();
+          g.add(new T.LineLoop(lineGeo, new T.LineBasicMaterial({ color: col, transparent: true, opacity: 0.7 })));
+          g.add(new T.Mesh(planeGeo, new T.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.02, side: T.DoubleSide, depthWrite: false, blending: T.AdditiveBlending })));
+          const z = -4 - i * SP;
+          const p = path(z);
+          g.position.set(p[0], p[1], z);
+          g.rotation.z = i * 0.14;
+          scene.add(g);
+          frames.push({ g: g, i: i });
+        }
+
+        /* stars + embers */
+        const starCount = 1600;
+        const sp = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount; i++) {
+          const r = 4 + Math.random() * 40, a = Math.random() * Math.PI * 2;
+          sp[i * 3] = Math.cos(a) * r;
+          sp[i * 3 + 1] = Math.sin(a) * r;
+          sp[i * 3 + 2] = 10 - Math.random() * 160;
+        }
+        const sg = new T.BufferGeometry();
+        sg.setAttribute('position', new T.BufferAttribute(sp, 3));
+        const stars = new T.Points(sg, new T.PointsMaterial({ color: 0xf1e9dd, size: 0.12, sizeAttenuation: true, transparent: true, opacity: 0.85, depthWrite: false }));
+        scene.add(stars);
+
+        const emberCount = 420;
+        const ep = new Float32Array(emberCount * 3);
+        for (let i = 0; i < emberCount; i++) {
+          const r = 3 + Math.random() * 18, a = Math.random() * Math.PI * 2;
+          ep[i * 3] = Math.cos(a) * r;
+          ep[i * 3 + 1] = Math.sin(a) * r;
+          ep[i * 3 + 2] = 8 - Math.random() * 150;
+        }
+        const eg = new T.BufferGeometry();
+        eg.setAttribute('position', new T.BufferAttribute(ep, 3));
+        const embers = new T.Points(eg, new T.PointsMaterial({ color: 0xed7959, size: 0.16, sizeAttenuation: true, transparent: true, opacity: 0.7, depthWrite: false, blending: T.AdditiveBlending }));
+        scene.add(embers);
+
+        /* the afterglow: a sun at the end of the tunnel */
+        const glowTex = glowTexture(T);
+        const sunMat = new T.MeshBasicMaterial({ color: 0xf08a5f, fog: false, transparent: true, opacity: 0 });
+        const sun = new T.Mesh(new T.SphereGeometry(7, 48, 48), sunMat);
+        sun.position.set(0, 0, -142);
+        sun.visible = false;
+        scene.add(sun);
+        const sunGlowMat = new T.SpriteMaterial({ map: glowTex, color: 0xed7959, blending: T.AdditiveBlending, transparent: true, opacity: 0, fog: false, depthWrite: false });
+        const sunGlow = new T.Sprite(sunGlowMat);
+        sunGlow.scale.set(70, 70, 1);
+        sunGlow.position.set(0, 0, -141);
+        sunGlow.visible = false;
+        scene.add(sunGlow);
+
+        /* logo, rendered in its own pass so camera roll never moves it */
+        const logoScene = new T.Scene();
+        const logoCam = new T.PerspectiveCamera(LOGO_FOV, 1, 0.1, 50);
+        logoScene.add(new T.AmbientLight(0xffffff, 0.6));
+        const keyLight = new T.PointLight(0xffd2b0, 1.6, 0);
+        keyLight.position.set(2, 3, -3);
+        logoScene.add(keyLight);
+        const rimLight = new T.PointLight(0x6aa7a8, 1.0, 0);
+        rimLight.position.set(-3, -2, -9);
+        logoScene.add(rimLight);
+
+        const logoRoot = new T.Group();
+        const spin = new T.Group();
+        logoRoot.add(spin);
+        logoScene.add(logoRoot);
+
+        const ringMat = new T.MeshStandardMaterial({ color: 0xed7959, emissive: 0xed7959, emissiveIntensity: 0.55, metalness: 0.5, roughness: 0.35, fog: false });
+        spin.add(new T.Mesh(new T.TorusGeometry(1.2, 0.045, 24, 160), ringMat));
+        const core = new T.Mesh(new T.SphereGeometry(0.34, 40, 40), new T.MeshStandardMaterial({ color: 0xed7959, emissive: 0xff9e75, emissiveIntensity: 0.9, metalness: 0.2, roughness: 0.4, fog: false }));
+        spin.add(core);
+
+        const gyro1 = new T.Group();
+        gyro1.rotation.x = Math.PI / 2.5;
+        const g1ring = new T.Mesh(new T.TorusGeometry(1.55, 0.025, 16, 140), new T.MeshStandardMaterial({ color: 0xf1b879, emissive: 0xf1b879, emissiveIntensity: 0.5, metalness: 0.4, roughness: 0.4, fog: false }));
+        gyro1.add(g1ring);
+        const sat1 = new T.Mesh(new T.SphereGeometry(0.07, 20, 20), new T.MeshBasicMaterial({ color: 0xffe5aa, fog: false }));
+        sat1.position.set(1.55, 0, 0);
+        gyro1.add(sat1);
+        spin.add(gyro1);
+
+        const gyro2 = new T.Group();
+        gyro2.rotation.y = Math.PI / 3;
+        const g2ring = new T.Mesh(new T.TorusGeometry(1.9, 0.018, 16, 160), new T.MeshStandardMaterial({ color: 0xf1e9dd, emissive: 0xf1e9dd, emissiveIntensity: 0.3, metalness: 0.3, roughness: 0.5, fog: false }));
+        gyro2.add(g2ring);
+        const sat2 = new T.Mesh(new T.SphereGeometry(0.06, 20, 20), new T.MeshBasicMaterial({ color: 0xed7959, fog: false }));
+        sat2.position.set(0, 1.9, 0);
+        gyro2.add(sat2);
+        spin.add(gyro2);
+
+        const logoGlow = new T.Sprite(new T.SpriteMaterial({ map: glowTex, color: 0xed7959, blending: T.AdditiveBlending, transparent: true, opacity: 0.28, fog: false, depthWrite: false }));
+        logoGlow.scale.set(5, 5, 1);
+        logoGlow.position.z = -0.4;
+        logoRoot.add(logoGlow);
+
+        return {
+          T: T, renderer: renderer, scene: scene, camera: camera, frames: frames, stars: stars, embers: embers,
+          sun: sun, sunMat: sunMat, sunGlow: sunGlow, sunGlowMat: sunGlowMat,
+          logoScene: logoScene, logoCam: logoCam, logoRoot: logoRoot, spin: spin, gyro1: gyro1, gyro2: gyro2,
+          lost: false
+        };
+      }
+
+      function resizeGL() {
+        if (!G) return;
+        const w = window.innerWidth, h = window.innerHeight;
+        G.renderer.setSize(w, h, false);
+        G.camera.aspect = w / h;
+        G.camera.updateProjectionMatrix();
+        G.logoCam.aspect = w / h;
+        G.logoCam.updateProjectionMatrix();
+      }
+
+      G = initGL();
+      if (G) {
+        resizeGL();
+        canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); if (G) G.lost = true; doc.classList.add('no-gl'); });
+      } else {
+        doc.classList.add('no-gl');
+      }
+
+      /* logo anchors: which side of the screen the logo sits on, per section */
+      const anchorDefs = [
+        ['.hero', 0, 0.08, 1.1],
+        ['#experience', 0.62, -0.05, 0.7],
+        ['.showcase', 0.8, 0.6, 0.6],
+        ['#showcase', -0.8, 0.35, 0.65],
+        ['.manifesto', 0, 0, 1.15],
+        ['#steps', 0.8, 0.55, 0.6],
+        ['#download', 0, 0.05, 1.1]
+      ];
+      const anchors = anchorDefs.map((d) => ({ el: $(d[0]), x: d[1], y: d[2], s: d[3] })).filter((a) => a.el);
+
+      function logoTarget() {
+        if (!anchors.length) return { x: 0, y: 0, s: 1 };
+        const mid = sy + window.innerHeight / 2, sc = window.scrollY;
+        const cs = anchors.map((a) => { const r = a.el.getBoundingClientRect(); return r.top + sc + r.height / 2; });
+        const last = anchors.length - 1;
+        if (mid <= cs[0]) return { x: anchors[0].x, y: anchors[0].y, s: anchors[0].s };
+        if (mid >= cs[last]) return { x: anchors[last].x, y: anchors[last].y, s: anchors[last].s };
+        let k = 0;
+        while (k < last - 1 && mid >= cs[k + 1]) k++;
+        const t = smooth(cs[k], cs[k + 1], mid);
+        const a = anchors[k], b = anchors[k + 1];
+        return { x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), s: lerp(a.s, b.s, t) };
+      }
+
+      function updateGL(p) {
+        const g = G;
+        const camZ = -p * TUNNEL_LEN;
+        const pc = path(camZ);
+        g.camera.position.set(pc[0] * 0.8, pc[1] * 0.8, camZ);
+        g.camera.rotation.set(0.035 * Math.sin(camZ * 0.045), -0.05 * Math.cos(camZ * 0.06), p * 0.9 + Math.sin(p * 9) * 0.04);
+
+        for (let k = 0; k < g.frames.length; k++) {
+          const f = g.frames[k];
+          f.g.rotation.z = f.i * 0.14 + sy * 0.00025 * (f.i % 2 ? 1 : -1);
+        }
+        g.stars.rotation.z = sy * 0.00008;
+        g.embers.rotation.z = -sy * 0.00012;
+
+        const o = smooth(0.45, 0.95, p);
+        g.sun.visible = g.sunGlow.visible = o > 0.001;
+        g.sunMat.opacity = 0.95 * o;
+        g.sunGlowMat.opacity = 0.55 * o;
+
+        /* logo: position by section, spin by scroll distance */
+        const aspect = window.innerWidth / window.innerHeight;
+        const halfH = Math.tan((LOGO_FOV / 2) * Math.PI / 180) * LOGO_DIST;
+        const halfW = halfH * aspect;
+        const narrow = aspect < 0.9;
+        const lt = logoTarget();
+        const x = narrow ? lt.x * 0.25 : lt.x;
+        const s = narrow ? lt.s * 0.75 : lt.s;
+        g.logoRoot.position.set(x * halfW * 0.82, lt.y * halfH, -LOGO_DIST);
+        g.logoRoot.scale.setScalar(s);
+        g.spin.rotation.y = sy * 0.0045;
+        g.spin.rotation.x = 0.35 * Math.sin(sy * 0.0013);
+        g.gyro1.rotation.y = sy * 0.007;
+        g.gyro2.rotation.x = -sy * 0.006;
+
+        g.renderer.clear();
+        g.renderer.render(g.scene, g.camera);
+        g.renderer.clearDepth();
+        g.renderer.render(g.logoScene, g.logoCam);
+      }
+
+      const lfi = $('#lfi');
+      function updateFallback() {
+        if (!lfi) return;
+        lfi.style.setProperty('--lry', (sy * 0.25) + 'deg');
+        lfi.style.setProperty('--lrx', (18 * Math.sin(sy * 0.002)) + 'deg');
+      }
+
+      /* ---------- pinned 3D app showcase ---------- */
+      const stage = $('#showcase');
+      const device = $('#device');
+      const screenEl = $('#screen');
+      const mock = $('#mock');
+      const mScroll = $('#mScroll');
+      const mLib = $('#mLib');
+      const mPly = $('#mPly');
+      const mFill = $('#mFill');
+      const mKnob = $('#mKnob');
+      const mThumb = $('#mThumb');
+      const mThumbT = $('#mThumbT');
+      const mTime = $('#mTime');
+      const stageProg = $('#stageProg');
+      const caps = document.querySelectorAll('.cap');
+      const TOTAL = 7083;
+      const fmtT = (s) => {
+        s = Math.max(0, Math.floor(s));
+        const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60;
+        return h + ':' + String(m).padStart(2, '0') + ':' + String(x).padStart(2, '0');
+      };
+
+      function fitScreen() {
+        if (!screenEl || !mock) return;
+        const k = screenEl.clientWidth / 1000;
+        if (k > 0) mock.style.setProperty('--k', String(k));
+      }
+
+      let lastCap = -1;
+      function updateStage() {
+        if (!stage || !device) return;
+        const r = stage.getBoundingClientRect();
+        const top = r.top + window.scrollY;
+        const total = Math.max(1, stage.offsetHeight - window.innerHeight);
+        const p = clamp((sy - top) / total, 0, 1);
+
+        const intro = smooth(0, 0.25, p);
+        device.style.transform = 'rotateX(' + lerp(16, 4, p) + 'deg) rotateY(' + lerp(-28, 22, p) + 'deg) rotateZ(' + lerp(-2, 1.5, p) + 'deg) scale(' + lerp(0.9, 1, intro) + ')';
+
+        if (mScroll) mScroll.style.transform = 'translateY(' + (-lerp(0, 250, smooth(0.04, 0.48, p))) + 'px)';
+        const m = smooth(0.5, 0.62, p);
+        if (mLib) mLib.style.opacity = String(1 - m);
+        if (mPly) mPly.style.opacity = String(m);
+        if (mPly) mPly.style.setProperty('--hue', (p * 70) + 'deg');
+
+        const f = lerp(0.16, 0.84, smooth(0.6, 1, p));
+        if (mFill) mFill.style.width = (f * 100) + '%';
+        if (mKnob) mKnob.style.left = (f * 100) + '%';
+        if (mThumb) mThumb.style.left = (30 + f * 940) + 'px';
+        if (mThumbT) mThumbT.textContent = fmtT(f * TOTAL);
+        if (mTime) mTime.textContent = fmtT(f * TOTAL) + ' / ' + fmtT(TOTAL);
+
+        if (stageProg) stageProg.style.width = (p * 100) + '%';
+        const idx = p < 0.34 ? 0 : p < 0.62 ? 1 : 2;
+        if (idx !== lastCap) {
+          lastCap = idx;
+          caps.forEach((c, i) => c.classList.toggle('on', i === idx));
+        }
+      }
+
+      /* ---------- main loop ---------- */
+      function update() {
+        const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+        const p = clamp(sy / max, 0, 1);
+        if (G && !G.lost) updateGL(p); else updateFallback();
+        updateStage();
+      }
+
+      function loop() {
+        const diff = target - sy;
+        if (reduce) {
+          if (sy !== target) { sy = target; dirty = true; }
+        } else if (Math.abs(diff) > 0.15) {
+          sy += diff * 0.2;
+          dirty = true;
+        } else if (sy !== target) {
+          sy = target;
+          dirty = true;
+        }
+        if (dirty) { dirty = false; update(); }
+        window.requestAnimationFrame(loop);
+      }
+
+      window.addEventListener('scroll', () => { target = window.scrollY; }, { passive: true });
+      window.addEventListener('resize', () => { resizeGL(); fitScreen(); dirty = true; });
+      window.addEventListener('load', () => { fitScreen(); dirty = true; });
+      if ('ResizeObserver' in window) {
+        new ResizeObserver(() => { fitScreen(); dirty = true; }).observe(document.body);
+      }
+      fitScreen();
+      update();
+      window.requestAnimationFrame(loop);
     })();
   </script>
 </body>
